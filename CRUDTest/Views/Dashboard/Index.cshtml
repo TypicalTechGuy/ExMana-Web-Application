@@ -1,0 +1,60 @@
+﻿@model List<CRUDTest.Models.UserTransaction>
+@inject CRUDTest.Models.AppDbContext _context
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Summary</h5>
+                <p>Total Income: Rp @ViewBag.TotalIncome IDR</p>
+                <p>Total Expenses: Rp @ViewBag.TotalExpenses IDR</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Recent Transactions</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model)
+                        {
+                            <tr>
+                                <td>@transaction.date.ToShortDateString()</td>
+                                <td>@transaction.description</td>
+                                <td>Rp @transaction.amount IDR</td>
+                                <td>@transaction.type</td>
+                                <td>
+                                    @if (transaction.category_id != null)
+                                    {
+                                        var category = _context.TransactionCategories.Find(transaction.category_id);
+                                        if (category != null)
+                                        {
+                                            @category.category
+                                            // Access the category property
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Welcome to ExMana";
+}
+
+<div class="text-center">
+    <h1 class="display-4">ExMana: Your Expense Manager</h1>
+    <p>Effortlessly track and manage your expenses with ExMana.</p>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Get Started & Key Features</h5>
+                    <p>Sign up or log in to start managing your finances.</p>
+                    <a asp-controller="Login" asp-action="Index" class="btn btn-primary">Login</a>
+                    <a asp-controller="Users" asp-action="Create" class="btn btn-secondary">Sign Up</a>
+
+                    <h6 class="mt-4">Key Features:</h6>
+                    <ul class="list-unstyled">
+                        <li>Track income and expenses</li>
+                        <li>Categorize transactions</li>
+                        <li>Generate reports</li>
+                        <li>User-friendly interface</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
