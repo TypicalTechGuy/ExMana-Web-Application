@@ -52,7 +52,9 @@ namespace ExManaWeb.Controllers
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                TempData["SuccessMessage"] = "Account created successfully! You can now log in.";
+                return RedirectToAction("Index", "Login");
             }
             return View(user);
         }

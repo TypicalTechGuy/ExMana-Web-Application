@@ -1,0 +1,83 @@
+﻿@model CRUDTest.Models.UserTransaction
+@inject CRUDTest.Models.AppDbContext _context
+
+@{
+    ViewData["Title"] = "Edit Transaction";
+}
+
+<h1>Edit Transaction</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<form asp-action="EditTransaction" method="post">
+    <input type="hidden" asp-for="id" />
+
+    <div class="form-group mb-3">
+        <label for="date">Date:</label>
+        <input type="date" class="form-control" id="date" name="date" value="@Model.date.ToString("yyyy-MM-dd")" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="description">Description:</label>
+        <input type="text" class="form-control" id="description" name="description" value="@Model.description" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="amount">Amount:</label>
+        <input type="number" class="form-control" id="amount" name="amount" value="@Model.amount" required>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="type">Type:</label>
+        <select class="form-control" id="type" name="type" required onchange="filterCategories()">
+            <option value="Income" selected="@(Model.type == "Income" ? "selected" : null)">Income</option>
+            <option value="Outcome" selected="@(Model.type == "Outcome" ? "selected" : null)">Outcome</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="category_id">Category:</label>
+        <select class="form-control" id="category_id" name="category_id">
+            <option value="">Select Category</option>
+            @foreach (var category in _context.TransactionCategories)
+            {
+                <option value="@category.id" class="@category.type"
+                        selected="@(category.id == Model.category_id ? "selected" : null)">
+                    @category.category
+                </option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+<script>
+    function filterCategories() {
+        var type = document.getElementById("type").value;
+        var categorySelect = document.getElementById("category_id");
+        var options = categorySelect.options;
+
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].value === "") continue;
+
+            if (options[i].className === type) {
+                options[i].style.display = "block";
+            } else {
+                options[i].style.display = "none";
+            }
+        }
+
+        if (categorySelect.selectedOptions[0].style.display === "none") {
+            categorySelect.value = "";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", filterCategories);
+</script>

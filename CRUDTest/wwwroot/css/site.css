@@ -18,19 +18,128 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #202124;
+    color: #e8eaed;
+}
+
+a {
+    color: #8ab4f8; 
+}
+
+a:hover {
+    color: #bbd2fc;
 }
 
 .card {
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #3c3f43;
+    border: 1px solid #5f6368;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .card-title {
     font-weight: bold;
+    color: #e8eaed;
+}
+
+.btn-primary {
+    background-color: #8ab4f8;
+    border-color: #8ab4f8;
+    color: #202124;
+}
+
+    .btn-primary:hover {
+        background-color: #bbd2fc;
+        border-color: #bbd2fc;
+        color: #202124;
+    }
+
+.form-control {
+    background-color: #3c3f43;
+    border: 1px solid #5f6368;
+    color: #e8eaed;
+}
+
+    .form-control:focus {
+        background-color: #3c3f43;
+        border-color: #8ab4f8;
+        box-shadow: 0 0 0 0.1rem rgba(138, 180, 248, 0.25);
+        color: #e8eaed;
+    }
+
+select.form-control {
+    background-color: #3c3f43;
+    border: 1px solid #5f6368;
+    color: #e8eaed;
+}
+
+    select.form-control:focus {
+        background-color: #3c3f43;
+        border-color: #8ab4f8;
+        box-shadow: 0 0 0 0.1rem rgba(138, 180, 248, 0.25);
+        color: #e8eaed;
+    }
+
+.table {
+    color: #e8eaed;
+}
+
+    .table thead th {
+        border-bottom: 2px solid #5f6368;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid #5f6368;
+    }
+
+.alert-success {
+    background-color: #1e3a29;
+    border-color: #2e513b;
+    color: #a7f3d0;
+}
+
+.navbar {
+    background-color: #3c3f43;
+    border-bottom: 1px solid #5f6368;
+}
+
+.navbar-brand,
+.navbar-nav .nav-link,
+.navbar-text {  
+    color: #e8eaed;
+}
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link:focus {
+        color: #bbd2fc;
+    }
+
+.navbar-toggler {
+    border-color: #5f6368;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(232, 234, 237, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+footer.border-top {
+    border-color: #5f6368 !important;
+}
+
+footer.footer.text-muted {
+    color: #e8eaed;
 }
 
 .list-unstyled li {
     margin-bottom: 8px;
+}
+
+.transaction-section {
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-bottom: 20px;
 }

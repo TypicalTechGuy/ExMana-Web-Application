@@ -29,7 +29,7 @@ namespace ExManaWeb.Controllers
             if (user != null)
             {
                 HttpContext.Session.SetInt32("UserId", user.id);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {
@@ -41,7 +41,7 @@ namespace ExManaWeb.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Home");
         }
 
     }

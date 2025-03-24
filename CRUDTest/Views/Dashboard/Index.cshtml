@@ -5,19 +5,72 @@
     ViewData["Title"] = "Dashboard";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <h1>Dashboard</h1>
 
-<div class="row">
+<div class="row transaction-section">
     <div class="col-md-6">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Summary</h5>
                 <p>Total Income: Rp @ViewBag.TotalIncome IDR</p>
                 <p>Total Expenses: Rp @ViewBag.TotalExpenses IDR</p>
+                <div class="chart-container">
+                    <canvas id="outcomePieChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Add Transaction</h5>
+                <form asp-action="AddTransaction" method="post">
+                    <div class="form-group mb-3">
+                        <label for="date">Date:</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="description">Description:</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="amount">Amount:</label>
+                        <input type="number" class="form-control" id="amount" name="amount" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="type">Type:</label>
+                        <select class="form-control" id="type" name="type" required onchange="filterCategories()">
+                            <option value="Income">Income</option>
+                            <option value="Outcome">Expense</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="category_id">Category:</label>
+                        <select class="form-control" id="category_id" name="category_id">
+                            <option value="">Select Category</option>
+                            @foreach (var category in _context.TransactionCategories)
+                            {
+                                <option value="@category.id" class="@category.type">@category.category</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <br /><br /><br />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Recent Transactions</h5>
@@ -29,6 +82,7 @@
                             <th>Amount</th>
                             <th>Type</th>
                             <th>Category</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,16 +93,13 @@
                                 <td>@transaction.description</td>
                                 <td>Rp @transaction.amount IDR</td>
                                 <td>@transaction.type</td>
+                                <td>@transaction.CategoryName</td>
                                 <td>
-                                    @if (transaction.category_id != null)
-                                    {
-                                        var category = _context.TransactionCategories.Find(transaction.category_id);
-                                        if (category != null)
-                                        {
-                                            @category.category
-                                            // Access the category property
-                                        }
-                                    }
+                                    <a asp-action="EditTransaction" asp-route-id="@transaction.id" class="btn btn-warning btn-sm">Edit</a>
+                                    <form asp-action="DeleteTransaction" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@transaction.id" />
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         }
@@ -58,3 +109,76 @@
         </div>
     </div>
 </div>
+
+<style>
+    .chart-container {
+        width: 100%;
+        max-height: 400px;
+    }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+</style>
+
+<script>
+    function filterCategories() {
+        var type = document.getElementById("type").value;
+        var categories = document.getElementById("category_id").options;
+
+        for (var i = 1; i < categories.length; i++) {
+            if (categories[i].className === type) {
+                categories[i].style.display = "block";
+            } else {
+                categories[i].style.display = "none";
+            }
+        }
+    }
+
+    filterCategories();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var outcomeData = @Html.Raw(Json.Serialize(ViewBag.OutcomeCategoryData ?? new List<object>()));
+
+        console.log("Outcome Category Data:", outcomeData);
+
+        if (!outcomeData || outcomeData.length === 0) {
+            console.warn("No outcome data available.");
+            return;
+        }
+
+        var labels = outcomeData.map(item => item.categoryName);
+        var dataValues = outcomeData.map(item => parseFloat(item.totalAmount) || 0);
+
+        var ctx = document.getElementById('outcomePieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Outcome by Category',
+                    data: dataValues,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FFC107'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Outcome by Category'
+                    }
+                }
+            }
+        });
+    });
+</script>

@@ -15,8 +15,13 @@ namespace CRUDTest.Models
         public DateTime created_at { get; set; }
         public int category_id { get; set; }
 
-        // Navigation property (optional, for EF Core relationships)
+        [ForeignKey("category_id")]
+        public TransactionCategory TransactionCategory { get; set; }
+
         [ForeignKey("user_id")]
         public User User { get; set; }
+
+        [NotMapped]
+        public string CategoryName { get; set; }
     }
 }
